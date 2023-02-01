@@ -20,6 +20,22 @@ const getAllPosts = async(req,res)=>{
 }
 
 const getPostById = async(req,res)=>{
+    const {body} = req;
+    const token = req.headers.authorization.split(" ")[1];
+    await auth.decodeToken(token)
+    .then( async ()=>{
+        const post = await postService.getPostById(body._id);
+        console.log(post)
+        if(post != null){
+          res.status(201).send({status : 201, data : post});
+        }else{
+          res.status(404).send({status : 404, data : "This post doesn't exists"});
+        }
+    })
+    .catch(error =>{
+      console.log(error)
+      res.status(500).send({status : 500})
+    })
 
 }
 
@@ -45,6 +61,21 @@ const updatePost = async(req,res)=>{
 
 
 const deletePost = async(req,res)=>{
+    let { _id } = req.body;
+    
+    const deletedPost = postService.deletePostById(_id)
+    .then((response)=>{
+        if(response == true){
+            res.status(201).send({status : 201, data : "Post eliminado correctamente"})
+        }else{
+            res.status(403).send({status : 403, data : "El post no existe"})
+        }
+    })
+    .catch(error =>{
+        console.log(error)
+        res.status(500).send({status : 500, data : "Error interno del servidor"})
+    })
+
 
 }
 

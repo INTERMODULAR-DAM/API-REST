@@ -4,22 +4,15 @@ const { validationResult } = require('express-validator');
 const userUtils = require('../utils/userUtils');
 
 const getUserById = async (req,res)=>{
-  console.log(req);
-  const {body} = req;
   const token = req.headers.authorization.split(" ")[1];
   await auth.decodeToken(token)
   .then( async user =>{
-    if(user.rol || user.sub == body._id){
-      const searchedUser = await userServcice.getUserById(body._id)
+      const searchedUser = await userService.getUserById(user.sub)
       if(searchedUser != null){
         res.status(201).send({status : 201, data : searchedUser});
       }else{
-        res.status(404).send({status : 404})
+        res.status(404).send({status : 404, data : "Expired token"})
       }
-    }else{
-      res.status(401).send({status : 401})
-    }
-
   })
   .catch(error =>{
     console.log(error)
@@ -27,7 +20,7 @@ const getUserById = async (req,res)=>{
   })
 }
 
-const getUserByEmail = async(req, res) => {
+/*const getUserByEmail = async(req, res) => {
   const email = req.params.email;
   const token = req.headers.authorization;
   await auth.decodeToken(token).then( async () =>{
@@ -42,7 +35,7 @@ const getUserByEmail = async(req, res) => {
     console.log(error)
     res.status(500).send({status : 500})
   })
-}
+} */
 
 
 const getAllUser = async (req, res) =>{
@@ -160,5 +153,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserById,
-  getUserByEmail
+  //getUserByEmail
 }

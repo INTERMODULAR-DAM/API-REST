@@ -16,6 +16,7 @@ const createPost = async (body) =>{
                 }
                 if(body.photos != undefined){
                     newPost = writePostPhotos(post, body);
+                    console.log(newPost)
                     await Post.updateOne(newPost);
                 }
             })
@@ -37,6 +38,36 @@ const deleteAllPosts = async () =>{
     })
 }
 
+
+const getPostById = async(id) =>{
+    return await Post.findById(id)
+    .catch(error =>{
+        console.log(error)
+    })
+}
+
+const deletePostById = async (id)=>{
+    let response = false;
+    await Post.findById(id).clone()
+    .then(async (postFound) =>{
+        if(postFound != null){
+            await Post.findOneAndDelete(postFound)
+            .then(result=>{
+                if(result != null){
+                    response = true;
+                    //imageOperation.deleteImage(result.pfp_path)
+                }})
+            .catch(error =>{
+                console.log(error)
+            })
+        }
+    })
+    .catch(error =>{
+        console.log(error)
+    })
+    return response
+}
+
 // const addPhoto = async(body) =>{
 //     const post = await Post.findOne({_id : body.id});
 //     await writePostPhoto(post, body).then(async updated =>{
@@ -55,5 +86,7 @@ module.exports = {
     getAllPosts,
     createPost,
     deleteAllPosts,
+    getPostById,
+    deletePostById,
     // addPhoto
 }
