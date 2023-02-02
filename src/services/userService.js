@@ -82,7 +82,6 @@ const deleteUser = async (id) =>{
 
 module.exports = {
     getAllUser,
-    //getUserByEmail,
     signIn,
     signUp,
     updateUser,
