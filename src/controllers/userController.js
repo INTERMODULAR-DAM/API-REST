@@ -20,24 +20,6 @@ const getUserById = async (req,res)=>{
   })
 }
 
-/*const getUserByEmail = async(req, res) => {
-  const email = req.params.email;
-  const token = req.headers.authorization;
-  await auth.decodeToken(token).then( async () =>{
-    const searchedUser = await userService.getUserByEmail(email)
-      if(searchedUser != null){
-        res.status(201).send({status : 201, data : searchedUser});
-      }else{
-        res.status(404).send({status : 404})
-      }
-  })
-  .catch(error =>{
-    console.log(error)
-    res.status(500).send({status : 500})
-  })
-} */
-
-
 const getAllUser = async (req, res) =>{
   const token = req.headers.authorization.split(" ")[1]
   await auth.decodeToken(token)
@@ -153,5 +135,4 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserById,
-  //getUserByEmail
 }
