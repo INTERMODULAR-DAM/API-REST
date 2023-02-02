@@ -11,15 +11,6 @@ const getUserById = async (_id)=>{
     return user;
 }
 
-/* const getUserByEmail = async (email)=>{
-    let user = await User.findOne({email : email});
-    if(user != null){
-        user = await imageOperation.asignPhoto(user);
-    }
-    return user;
-} */
-
-
 const getAllUser = async () =>{
     let allUsers =  await User.find((error, users) => {
         if(error){
