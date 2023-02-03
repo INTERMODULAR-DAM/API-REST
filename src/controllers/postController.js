@@ -20,11 +20,10 @@ const getAllPosts = async(req,res)=>{
 }
 
 const getPostById = async(req,res)=>{
-    const {body} = req;
     const token = req.headers.authorization.split(" ")[1];
     await auth.decodeToken(token)
     .then( async ()=>{
-        const post = await postService.getPostById(body._id);
+        const post = await postService.getPostById(token.sub);
         console.log(post)
         if(post != null){
           res.status(201).send({status : 201, data : post});
@@ -57,6 +56,21 @@ const createPost = async (req,res) =>{
 
 
 const updatePost = async(req,res)=>{
+    const {body} = req;
+    await postService.updatePost(body._id, body)
+    .then(user =>{
+        if(user != null){
+            res.status(200).send({status : 200, data : "Post updated"});
+        }else{
+            res.status(400).send({status : 400, data : "Algún dato es incorrecto"});
+        }
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).send({status : 500, data : "An internal error has ocurred"})
+    })
+
+
 }
 
 

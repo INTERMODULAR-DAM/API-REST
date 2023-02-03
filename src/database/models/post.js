@@ -13,15 +13,17 @@ const postSchema = new mongoose.Schema({
     },
     category : {
         type : String, 
-        require : true
+        require : true,
+        enum : ["Senderismo", "Patines", "Kayak"]
     },
-    distancia : {
+    distance : {
         type : Number,
         require : true,
         min : 0
     },
     difficulty : {
         type : String, 
+        enum : ["Easy", "Medium", "Hard", "Expert"],
         require : true
     },
     track : [{
