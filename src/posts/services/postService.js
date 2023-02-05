@@ -1,9 +1,31 @@
 const Post = require('../models/post');
-const { writePostPhotos } = require('../../globalUtils/imageUtils');
+const { writePostPhotos, deletePostPhotos} = require('../../globalUtils/imageUtils');
 
 
 const getAllPosts = async ()=>{
     return await Post.find()
+}
+
+const getAllUserOwnPost = async(id)=>{
+    return await Post.find({user : id})
+    .catch(error =>{
+        console.log(error)
+    })
+}
+
+
+const getAllUserPost = async(id)=>{
+    return await Post.find({user : id})
+    .catch(error =>{
+        console.log(error)
+    })
+}
+
+const getAllPublicPosts = async()=>{
+    return await Post.find({privacity : false})
+    .catch(error => {
+        console.log(error)
+    })
 }
 
 const getPostById = async(id) =>{
@@ -22,10 +44,11 @@ const createPost = async (body) =>{
                     reject({status : 404, data : "No se pudo crear la ruta"})
                 }
                 if(body.photos != undefined){
-                    newPost = writePostPhotos(post, body);
-                    console.log(newPost)
-                    await Post.updateOne(newPost);
+                    post = writePostPhotos(post, body);
+                }else{
+                    post.photos.push("noPhotos.png");
                 }
+                await Post.updateOne({_id : post._id},{photos : post.photos});
             })
             resolve("Ruta creada correctamente")
         } catch (error) {
@@ -34,9 +57,12 @@ const createPost = async (body) =>{
     });
 }
 
-const deleteAllPosts = async () =>{
-    await Post.deleteMany()
-    .then(()=>{
+const deleteAllPostsByUser = async (id) =>{
+    await Post.deleteMany({user : id})
+    .then((posts)=>{
+        for(let post in posts){
+            deletePostPhotos(post);
+        }
         return true;
     })
     .catch(error =>{
@@ -47,18 +73,11 @@ const deleteAllPosts = async () =>{
 
 const deletePostById = async (id)=>{
     let response = false;
-    await Post.findById(id).clone()
+    await Post.findOneAndDelete({_id : id})
     .then(async (postFound) =>{
         if(postFound != null){
-            await Post.findOneAndDelete(postFound)
-            .then(result=>{
-                if(result != null){
-                    response = true;
-                    //imageOperation.deleteImage(result.pfp_path)
-                }})
-            .catch(error =>{
-                console.log(error)
-            })
+            deletePostPhotos(postFound)
+            response = true;
         }
     })
     .catch(error =>{
@@ -69,7 +88,7 @@ const deletePostById = async (id)=>{
 
 
 const updatePost = async (id, newData) =>{
-    await Post.updateOne({_id : id}, newData)
+    return await Post.updateOne({_id : id}, newData).clone()
     .catch(error =>{
         console.log(error)
     })
@@ -92,9 +111,12 @@ const updatePost = async (id, newData) =>{
 module.exports = {
     getAllPosts,
     createPost,
-    deleteAllPosts,
+    deleteAllPostsByUser,
     getPostById,
     deletePostById,
     updatePost,
+    getAllUserOwnPost,
+    getAllUserPost,
+    getAllPublicPosts,
     // addPhoto
 }

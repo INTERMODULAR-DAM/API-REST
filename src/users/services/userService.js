@@ -2,7 +2,7 @@ const User = require('../models/user')
 const imageOperation = require('../../globalUtils/imageUtils')
 const service = require('../../globalServices/autentication');
 const {identifyId} = require('../utils/userUtils');
-const { validate } = require('../models/user');
+const postService = require('../../posts/services/postService')
 
 const getUserById = async (_id)=>{
     let user = await User.findById(_id)
@@ -68,12 +68,12 @@ const updateUser = async (id, changes) =>{
 
 const deleteUser = async (id) =>{
     let response;
-    await User.findOneAndDelete(id).then(result => {
-    console.log(result)
+    await User.findOneAndDelete({_id : id}).then(result => {
     response = false;
     if(result != null){
         response = true;
-        imageOperation.deleteImage(result.pfp_path)
+        imageOperation.deleteImage(result.pfp_path);
+        postService.deleteAllPostsByUser(id);
     }
     }).catch(error => {
       console.log(error);
