@@ -1,5 +1,5 @@
 
-const User = require('../database/models/user')
+const User = require('../models/user')
 
 const identifyId = async (userId) =>{
     let json;

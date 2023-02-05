@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('../models/user')
+const User = require('../../users/models/user')
 
 const postSchema = new mongoose.Schema({
     date : {
@@ -14,12 +14,11 @@ const postSchema = new mongoose.Schema({
     category : {
         type : String, 
         require : true,
-        enum : ["Senderismo", "Patines", "Kayak"]
+        enum : ["Hiking", "Roller skating", "Kayaking"]
     },
     distance : {
-        type : Number,
-        require : true,
-        min : 0
+        type : String,
+        require : true
     },
     difficulty : {
         type : String, 
@@ -31,8 +30,7 @@ const postSchema = new mongoose.Schema({
         lng : String
     }],
     duration : {
-        type : Number,
-        min : 0,
+        type : String,
         require : true
     },
     description : {

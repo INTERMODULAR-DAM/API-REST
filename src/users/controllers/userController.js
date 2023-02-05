@@ -1,5 +1,5 @@
 const userService = require('../services/userService');
-const auth = require('../services/autentication')
+const auth = require('../../globalServices/autentication')
 const { validationResult } = require('express-validator');
 const userUtils = require('../utils/userUtils');
 
@@ -62,7 +62,7 @@ const signUp = async (req, res)=>{
     let errors = validationResult(req)
     if(!errors.isEmpty()){
       console.log(errors.array())
-      return res.status(400).send({status : 400, data : "No se ha podido crear el usuario, falta algún campo por rellenar correctamente" })
+      return res.status(400).send({status : 400, data : errors.array()[0].msg })
     }
     try{
       const newUser = await userUtils.createUser(body);

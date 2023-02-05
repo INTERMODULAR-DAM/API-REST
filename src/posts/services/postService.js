@@ -1,9 +1,16 @@
-const Post = require('../database/models/post');
-const { writePostPhotos } = require('../utils/imageUtils');
+const Post = require('../models/post');
+const { writePostPhotos } = require('../../globalUtils/imageUtils');
 
 
 const getAllPosts = async ()=>{
     return await Post.find()
+}
+
+const getPostById = async(id) =>{
+    return await Post.findById(id)
+    .catch(error =>{
+        console.log(error)
+    })
 }
 
 const createPost = async (body) =>{
@@ -38,14 +45,6 @@ const deleteAllPosts = async () =>{
     })
 }
 
-
-const getPostById = async(id) =>{
-    return await Post.findById(id)
-    .catch(error =>{
-        console.log(error)
-    })
-}
-
 const deletePostById = async (id)=>{
     let response = false;
     await Post.findById(id).clone()
@@ -68,6 +67,14 @@ const deletePostById = async (id)=>{
     return response
 }
 
+
+const updatePost = async (id, newData) =>{
+    await Post.updateOne({_id : id}, newData)
+    .catch(error =>{
+        console.log(error)
+    })
+}
+
 // const addPhoto = async(body) =>{
 //     const post = await Post.findOne({_id : body.id});
 //     await writePostPhoto(post, body).then(async updated =>{
@@ -88,5 +95,6 @@ module.exports = {
     deleteAllPosts,
     getPostById,
     deletePostById,
+    updatePost,
     // addPhoto
 }

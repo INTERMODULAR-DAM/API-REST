@@ -1,7 +1,8 @@
-const User = require('../database/models/user')
-const imageOperation = require('../utils/imageUtils')
-const service = require('../services/autentication');
-const {identifyId} = require('../utils/userUtils')
+const User = require('../models/user')
+const imageOperation = require('../../globalUtils/imageUtils')
+const service = require('../../globalServices/autentication');
+const {identifyId} = require('../utils/userUtils');
+const { validate } = require('../models/user');
 
 const getUserById = async (_id)=>{
     let user = await User.findById(_id)

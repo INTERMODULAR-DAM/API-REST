@@ -1,12 +1,11 @@
 const {check} = require('express-validator');
-const User = require('../database/models/user')
+const User = require('../users/models/user')
 
 const signUpCheck = ()=>{
     return [
         check('email')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isEmail()
         .withMessage("Invalid email")
         .custom(async (email)=>{
@@ -18,8 +17,7 @@ const signUpCheck = ()=>{
 
         check('nick')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlphanumeric()
         .withMessage('Invalid nick')
         .custom(async (nick) =>{
@@ -30,8 +28,7 @@ const signUpCheck = ()=>{
 
         check('phone_number')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isMobilePhone('es-ES')
         .withMessage('Invalid phone number')
         .custom(async (phone)=>{
@@ -42,21 +39,18 @@ const signUpCheck = ()=>{
 
         check('name')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlpha()
         .withMessage("Invalid name"),
 
         check('lastname')
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
         .withMessage("Invalid lastname"),
 
         check('password')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isStrongPassword()
         .withMessage("Weak password")
     ]
@@ -66,68 +60,78 @@ const updateUserCheck = ()=>{
     return [
         check('email')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isEmail(),
 
         check('nick')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlphanumeric()
         .withMessage('Invalid nick'),
 
         check('phone_number')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isMobilePhone('es-ES')
         .withMessage('Invalid phone number'),
 
         check('name')
         .trim()
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlpha()
         .withMessage("Invalid name"),
 
         check('lastname')
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
         .withMessage("Invalid lastname"),
     ]
 }
 
-const updatePostCheck = () =>{
+const postCheck = () =>{
     return [
         check('name')
-        .not()
-        .isEmpty()
+        .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
         .withMessage('Invalid name'),
 
         check('category')
-        .not()
-        .isEmpty()
-        .matches([/\b(?:Senderismo|Patines|Kayak)\b/]),
+        .notEmpty()
+        .matches(/Hiking|Roller skating|Kayaking/g)
+        .withMessage('Invalid category, please check it'),
 
         check('distance')
-        .isNumeric()
-        .not()
-        .isEmpty()
-        .custom( distance =>{
-            if(distance <= 0){
-                throw new Error("Distance can't be equals or lower than 0");
-            }
-        }),
+        .notEmpty()
+        .withMessage("Distance is required"),
 
         check('difficulty')
-        .not()
-        .isEmpty()
-        .matches([/\b(?:Easy|Medium|Hard|Expert)\b/]),
+        .notEmpty()
+        .matches(/Easy|Medium|Hard|Expert/g)
+        .withMessage('Invalid difficulty, please check it'),
 
-        check('')
+        check('track')
+        .notEmpty()
+        .withMessage("Track is required"),
+
+        check('duration')
+        .notEmpty()
+        .withMessage("Duration is required"),
+
+        check('privacity')
+        .notEmpty()
+        .withMessage("Privacity is required"),
+
+        check('user')
+        .notEmpty()
+        .isMongoId()
+        .withMessage("Invalid user")
+        .custom(async user=>{
+            await User.findById(user)
+            .then(userFound=>{
+                if(!userFound)
+                    throw new Error("User need to be real, please check")
+            })
+        })
 
     ]
 }
@@ -136,5 +140,5 @@ const updatePostCheck = () =>{
 module.exports = {
     signUpCheck,
     updateUserCheck,
-    updatePostCheck,
+    postCheck,
 }

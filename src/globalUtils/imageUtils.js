@@ -1,6 +1,6 @@
 const fs = require('fs');
 const mime = require('mime');
-const Post = require('../database/models/post');
+const Post = require('../posts/models/post');
 
 function deleteImage(pfp){
     if(pfp != 'default.jpeg'){

@@ -12,9 +12,9 @@ let credentials = {
     cert : fs.readFileSync(__dirname + "/ssl/localhost-2023-01-22-113121.cer")
 }
 
-let v1UserRouter = require('./v1/userRoutes');
-let postRouter = require('./v1/postRoutes');
-let commentRouter = require('./v1/comments');
+let v1UserRouter = require('./users/userRoutes');
+let postRouter = require('./posts/postRoutes');
+let commentRouter = require('./comments/commentRoutes');
 
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGO_URI)

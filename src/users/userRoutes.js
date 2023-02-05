@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../middlewares/auth')
-const validation = require('../middlewares/validation')
-const userController = require('../controllers/userController')
+const auth = require('../globalMiddlewares/auth')
+const validation = require('../globalMiddlewares/validation')
+const userController = require('./controllers/userController')
 
 router
   .get('/all',auth, userController.getAllUser)
