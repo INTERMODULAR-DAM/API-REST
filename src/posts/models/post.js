@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const User = require('../../users/models/user')
 
 const postSchema = new mongoose.Schema({
     date : {

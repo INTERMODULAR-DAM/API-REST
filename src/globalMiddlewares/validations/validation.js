@@ -1,5 +1,5 @@
 const {check} = require('express-validator');
-const User = require('../users/models/user')
+const User = require('../../users/models/user')
 
 const signUpCheck = ()=>{
     return [
@@ -10,7 +10,6 @@ const signUpCheck = ()=>{
         .withMessage("Invalid email")
         .custom(async (email)=>{
             const searchedEmail = await User.find({email : email});
-            console.log(searchedEmail)
             if(searchedEmail.length > 0)
                 throw new Error("Email already in use")
         }),

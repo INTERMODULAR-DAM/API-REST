@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const User = require('../models/user')
-const Post = require('../models/post')
 
 const commentSchema = new mongoose.Schema({
     date : {
@@ -13,11 +11,14 @@ const commentSchema = new mongoose.Schema({
         require : true,
     },
     user : {
-      type : User,
+      type : mongoose.Schema.ObjectId, ref:"User",
       require : true  
     },
     post : {
-        type : Post,
+        type : mongoose.Schema.ObjectId, ref:"Post",
         require : true
     }
 })
+
+let Comment = mongoose.model('Comment', commentSchema);
+module.exports = Comment
