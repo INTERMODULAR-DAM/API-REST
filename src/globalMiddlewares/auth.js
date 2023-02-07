@@ -2,9 +2,8 @@ const service = require('../globalServices/autentication')
 
 function isAuth(req,res,next){
     if(!req.headers.authorization){
-        return res.status(404).send({status : 401, message : "No tienes autorización"})
+        return res.status(404).send({status : 401, message : "You don't have authorization"})
     }
-
     const token = req.headers.authorization.split(" ")[1]
     service.decodeToken(token)
     .then(response=>{

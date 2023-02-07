@@ -6,8 +6,7 @@ const checkComment = ()=> {
     return [
         check('message')
         .notEmpty()
-        .isAlphanumeric()
-        .withMessage("This comments isn't alphanumeric, please fix it"),
+        .withMessage("This comment is empty, you can't send a"),
 
         check('user')
         .notEmpty()
@@ -34,3 +33,5 @@ const checkComment = ()=> {
         })
     ]
 }
+
+module.exports = checkComment;

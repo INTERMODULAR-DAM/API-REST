@@ -4,40 +4,37 @@ const { validationResult } = require('express-validator');
 
 
 const getAllPosts = async(req,res)=>{
-    const token = req.headers.authorization.split(" ")[1];
-    await auth.decodeToken(token)
-    .then(async (user) =>{
-            if(user.rol == true){
-                const allPosts = await postService.getAllPosts();
-                res.status(200).send({status : 200, allPosts})
-            }else{
-                res.status(401).send({status :401, data : "You dont have authorization" }) 
-            }
-    })
-    .catch(error =>{
+    let {user} = req;
+    try{
+        if(user.rol == true){
+            const allPosts = await postService.getAllPosts();
+            res.status(200).send({status : 200, allPosts})
+        }else{
+            res.status(401).send({status :401, data : "You dont have authorization" }) 
+        }
+    }catch(error){
         console.log(error)
         res.status(403).send({status : 403, data : "An internal error has ocurred"})
-    })
+    }            
 }
 
 const getAllUserOwnPost = async (req,res)=>{
-    const token = req.headers.authorization.split(" ")[1];
-    await auth.decodeToken(token)
-    .then( async user =>{
+    let {user} = req;
+    try{
         const allUserPosts = await postService.getAllUserOwnPost(user.sub);
         res.status(200).send({status : 200, data : allUserPosts})
-    })
-    .catch(error=>{
+    }
+    catch(error){
         console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred"});
-    })
+    }
 }
 
 
 const getAllUserPost = async (req,res)=>{
-    const {id} = req.body;
+    const {_id} = req.body;
     try {
-        const allUserPosts = await postService.getAllUserPost(id);
+        const allUserPosts = await postService.getAllUserPost(_id);
         res.status(200).send({status : 200, data : allUserPosts})
     } catch (error) {
         console.log(error);
@@ -59,31 +56,22 @@ const getAllPublicPosts = async (req,res)=>{
 
 const getPostById = async(req,res)=>{
     const {_id} = req.body;
-    const token = req.headers.authorization.split(" ")[1];
-    await auth.decodeToken(token)
-    .then( async ()=>{
+    try{
         const post = await postService.getPostById(_id);
-        console.log(post)
         if(post != null){
           res.status(201).send({status : 201, data : post});
         }else{
           res.status(404).send({status : 404, data : "This post doesn't exists"});
         }
-    })
-    .catch(error =>{
+    }catch(error){
       console.log(error)
       res.status(500).send({status : 500, data : "You don't have authorization."})
-    })
+    }
 
 }
 
 
 const createPost = async (req,res) =>{
-    let errors = validationResult(req)
-    if(!errors.isEmpty()){
-      console.log(errors.array())
-      return res.status(400).send({status : 400, data : errors.array()[0].msg })
-    }
     let {body} = req;
     try{
         const newPost = await postService.createPost(body);
@@ -100,12 +88,7 @@ const createPost = async (req,res) =>{
 
 
 const updatePost = async(req,res)=>{
-    let errors = validationResult(req)
     const {body} = req;
-    if(!errors.isEmpty()){
-        console.log(errors.array())
-        return res.status(400).send({status : 400, data : errors.array()[0].msg })
-      }
     await postService.updatePost(body._id, body)
     .then(post =>{
         console.log(post)
@@ -143,10 +126,9 @@ const deletePost = async(req,res)=>{
 }
 
 const deleteAllPostsByUser = async (req,res)=>{
-    const token = req.headers.authorization.split(" ")[1];
+    let {user} = req;
     const {_id} = req.body;
-    auth.decodeToken(token)
-    .then(async (user)=>{
+    try{
         if(user.rol == true || user.sub == _id){
             if(postService.deleteAllPostsByUser(_id)){
                 res.status(200).send({status : 200, data : "All posts has been removed"})
@@ -156,12 +138,11 @@ const deleteAllPostsByUser = async (req,res)=>{
         }else{
             res.status(401).send({status : 401, data : "You don't have authorization"})
         }
-    })
-    .catch(error =>{
+    }
+    catch(error){
         console.log(error);
         res.status(500).send({status : 500, data : "Internal error has ocurred"})
-    })
-
+    }
 }
 
 // const addPhoto = async (req,res)=>{

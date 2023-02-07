@@ -57,7 +57,6 @@ const signUp = async (user, body) =>{
 
 const updateUser = async (id, changes) =>{
     const oldUser = await User.findById(id);
-    console.log(changes)
     await User.findOneAndUpdate({_id : id}, changes);
     if(changes.pfp_path != undefined && changes.pfp !=null){
         imageOperation.deleteImage(oldUser.pfp_path)

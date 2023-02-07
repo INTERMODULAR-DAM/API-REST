@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
         require : true, 
         default : Date.now()
     },
-    description : {
+    message : {
         type : String,
         require : true,
     },

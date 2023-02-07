@@ -19,7 +19,6 @@ function decodeToken(token){
             const payload = jwt.decode(token, process.env.SECRET_TOKEN)
             resolve(payload)
         } catch (error) {
-            console.log(error)
             reject({status : 401, "message" : "Expirated token or invalid token"})
         }
     })

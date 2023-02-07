@@ -73,7 +73,7 @@ const deleteAllPostsByUser = async (id) =>{
 
 const deletePostById = async (id)=>{
     let response = false;
-    await Post.findOneAndDelete({_id : id})
+    await Post.findByIdAndDelete(id)
     .then(async (postFound) =>{
         if(postFound != null){
             deletePostPhotos(postFound)
