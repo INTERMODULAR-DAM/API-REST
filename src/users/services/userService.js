@@ -1,15 +1,14 @@
 const User = require('../models/user')
-const imageOperation = require('../../globalUtils/imageUtils')
 const service = require('../../globalServices/autentication');
 const {identifyId} = require('../utils/userUtils');
-const postService = require('../../posts/services/postService')
+const postService = require('../../posts/services/postService');
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 const getUserById = async (_id)=>{
-    let user = await User.findById(_id)
-    if(user != null){
-        user = await imageOperation.asignPhoto(user);
-    }
-    return user;
+    return await User.findById(_id)
+
 }
 
 const getAllUser = async () =>{
@@ -24,13 +23,42 @@ const getAllUser = async () =>{
 
 const signIn = async (userId,password) =>{
     const searchedUser = await identifyId(userId, password);
-    if(searchedUser != null && await service.comparePassword(password, searchedUser.password)){
-        return {status : true, token : service.createToken(searchedUser)}
+    const MAX_LOGIN_ATTEMPS = 5
+    const LOCK_TIME= 4*60*60*1000
+    let now = Date.now();
+    let isLocked = searchedUser.lock_until > now;
+    let hasLockExpired = searchedUser.lock_until < now;
+
+    if(isLocked){
+        return { status : 400, data : "The account is locked, please wait to sign in"}
     }
-    else{
-        return {status : false, message : "El usuario o la contraseña son incorrectas, inténtelo de nuevo"}
+
+    if(hasLockExpired){
+        console.log("Expirado")
+        searchedUser.lock_until = undefined;
+        searchedUser.login_attempts = 0;
+        await searchedUser.save();
     }
-        
+
+   return await service.comparePassword(password, searchedUser.password)
+    .then(async isMatch =>{
+        if(isMatch){
+            if(searchedUser.login_attempts > 0)
+                await searchedUser.updateOne({$set: {login_attempts : 0}, $unset : {lock_until : 1}})
+            return {status : 200, data : service.createToken(searchedUser)} 
+        }else{
+            let updates = { $inc: {login_attempts: 1}}
+		    if (searchedUser.login_attempts + 1 >= MAX_LOGIN_ATTEMPS)
+			    updates.$set = {lock_until: now + LOCK_TIME}
+            await searchedUser.updateOne(updates)
+            return {status : 400, data : "The user or password are incorrect, try again"}
+        }
+    })
+    .catch(error =>{
+        console.log(error)
+        return {status : 500, data : "An internal error has ocurred, please contact with your administrator"}
+
+    })     
 }
 
 const signUp = async (user, body) =>{

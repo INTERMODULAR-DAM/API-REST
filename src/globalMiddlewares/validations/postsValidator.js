@@ -1,4 +1,4 @@
-const globalValidations = require('./globalValidations');
+
 
 
 const postCheck = () =>{

@@ -15,6 +15,7 @@ let credentials = {
 let v1UserRouter = require('./users/userRoutes');
 let postRouter = require('./posts/postRoutes');
 let commentRouter = require('./comments/commentRoutes');
+let imgRouter = require('./imageComponent/imageRouter')
 
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGO_URI)
@@ -26,11 +27,13 @@ app.use(bodyParser.urlencoded({
     limit: '500mb',
     extended: true,
     parameterLimit:50000}));
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('public', express.static(path.join(__dirname + '/../public/images')));
 
 app.use('/api/v1/users', v1UserRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/comments', commentRouter);
+app.use('/api/v1/imgs', imgRouter);
 
 const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(8081, ()=>{console.log('Servidor http corriendo en el puerto 81')})

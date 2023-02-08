@@ -57,7 +57,13 @@ let userSchema = new mongoose.Schema({
     {
         type : mongoose.Types.ObjectId, ref : 'User'
     }
-   ]
+   ],
+   login_attempts : {
+    type : Number,
+    required : true,
+    default : 0
+   },
+   lock_until : Number
 });
 
 const User = mongoose.model('User', userSchema);

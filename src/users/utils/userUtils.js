@@ -10,7 +10,7 @@ const identifyId = async (userId) =>{
     }else{
         json = {nick : userId};
     }
-    return await User.findOne(json, 'admin password');
+    return await User.findOne(json, 'admin password lock_until login login_attempts');
 }
 
 async function createUser(data){

@@ -1,5 +1,4 @@
 const Post = require('../models/post');
-const { writePostPhotos, deletePostPhotos} = require('../../globalUtils/imageUtils');
 
 
 const getAllPosts = async ()=>{

@@ -35,12 +35,8 @@ const getAllUser = async (req, res) =>{
 const signIn = async (req,res) =>{
   await userService.signIn(req.body.id, req.body.password)
     .then((response)=>{
-      if(response.status){
-        res.status(200).send({status : 200, data : response.token});
-      }else{
-        console.log("no signin")
-        res.status(400).send({status : 400, data : response.message});
-      }
+      console.log(response)
+      res.status(response.status).send({status : response.status, data : response.data});
     })
     .catch((error)=>{
       console.log(error)
