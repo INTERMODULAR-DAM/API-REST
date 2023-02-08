@@ -17,7 +17,6 @@ const getAllUser = async () =>{
           console.log("ERROR:", error);
         }
       }).clone()
-      allUsers = await imageOperation.asignPhoto(allUsers);
       return allUsers;
 }
 
@@ -62,9 +61,6 @@ const signIn = async (userId,password) =>{
 }
 
 const signUp = async (user, body) =>{
-    if(body.pfp){
-        user.pfp_path = imageOperation.writeImage(body);
-    }
     user.password = await service.encrypt(user.password);
     let token= await new Promise((resolve,reject) =>{
         try {
@@ -86,11 +82,11 @@ const signUp = async (user, body) =>{
 const updateUser = async (id, changes) =>{
     const oldUser = await User.findById(id);
     await User.findOneAndUpdate({_id : id}, changes);
-    if(changes.pfp_path != undefined && changes.pfp !=null){
-        imageOperation.deleteImage(oldUser.pfp_path)
-        changes.pfp_path = imageOperation.writeImage(changes)
-        await User.findOneAndUpdate({_id : id,}, {pfp_path : changes.pfp_path})
-    }
+    // if(changes.pfp_path != undefined && changes.pfp !=null){
+    //     imageOperation.deleteImage(oldUser.pfp_path)
+    //     changes.pfp_path = imageOperation.writeImage(changes)
+    //     await User.findOneAndUpdate({_id : id,}, {pfp_path : changes.pfp_path})
+    // }
 }
 
 const deleteUser = async (id) =>{
@@ -99,7 +95,7 @@ const deleteUser = async (id) =>{
     response = false;
     if(result != null){
         response = true;
-        imageOperation.deleteImage(result.pfp_path);
+        // imageOperation.deleteImage(result.pfp_path);
         postService.deleteAllPostsByUser(id);
     }
     }).catch(error => {

@@ -43,9 +43,9 @@ const createPost = async (body) =>{
                     reject({status : 404, data : "No se pudo crear la ruta"})
                 }
                 if(body.photos != undefined){
-                    post = writePostPhotos(post, body);
+                    //post = writePostPhotos(post, body);
                 }else{
-                    post.photos.push("noPhotos.png");
+                   // post.photos.push("noPhotos.png");
                 }
                 await Post.updateOne({_id : post._id},{photos : post.photos});
             })
@@ -59,9 +59,8 @@ const createPost = async (body) =>{
 const deleteAllPostsByUser = async (id) =>{
     await Post.deleteMany({user : id})
     .then((posts)=>{
-        for(let post in posts){
-            deletePostPhotos(post);
-        }
+        // for(let post in posts){
+        // }
         return true;
     })
     .catch(error =>{
@@ -75,7 +74,7 @@ const deletePostById = async (id)=>{
     await Post.findByIdAndDelete(id)
     .then(async (postFound) =>{
         if(postFound != null){
-            deletePostPhotos(postFound)
+            //deletePostPhotos(postFound)
             response = true;
         }
     })

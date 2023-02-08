@@ -61,9 +61,13 @@ let userSchema = new mongoose.Schema({
    login_attempts : {
     type : Number,
     required : true,
+    select : false,
     default : 0
    },
-   lock_until : Number
+   lock_until : {
+    type : Number,
+    select : false,
+   }
 });
 
 const User = mongoose.model('User', userSchema);
