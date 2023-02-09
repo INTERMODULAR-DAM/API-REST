@@ -9,6 +9,7 @@ const checkErrors = require('../globalMiddlewares/checkErrorsValidation');
 router
   .get('/all',auth, userController.getAllUser)
   .get('/', auth, userController.getUserById)
+  .post('/forgotPassword', userController.forgotPassword)
   .post('/signIn', userController.signIn)
   .post('/signUp',validation.signUpCheck(), checkErrors, userController.signUp)
   .patch('/', auth, validation.updateUserCheck(), checkErrors, userController.updateUser)

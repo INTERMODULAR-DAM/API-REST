@@ -2,9 +2,11 @@ const imageService = require('../services/imageService')
 
 
 const uploadUserPFP = async (req,res)=>{
-    await imageService.uploadUserPFP(req.user.sub, req.fileName)
+    console.log(req.file)
+    await imageService.uploadUserPFP(req.headers.id, req.fileName)
     .then(response =>{
         if(response){
+            console.log("actualizado")
             return res.status(200).send({status : 200, data : "Image uploaded correctly"})
         }
     }).catch(error =>{
@@ -13,8 +15,6 @@ const uploadUserPFP = async (req,res)=>{
     })
     
 }
-
-
 const uploadPostPhotos = async(req,res) =>{
 
 }

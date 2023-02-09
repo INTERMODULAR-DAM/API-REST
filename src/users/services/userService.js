@@ -2,6 +2,7 @@ const User = require('../models/user')
 const service = require('../../globalServices/autentication');
 const {identifyId} = require('../utils/userUtils');
 const postService = require('../../posts/services/postService');
+const emailUtils = require('../../globalUtils/emailUtils')
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -62,14 +63,15 @@ const signIn = async (userId,password) =>{
 
 const signUp = async (user, body) =>{
     user.password = await service.encrypt(user.password);
-    let token= await new Promise((resolve,reject) =>{
-        try {
+    let token= await new Promise(async (resolve,reject) =>{
+         try {
             new User({...user}).save((err) => {
                 if (err) {
                     reject(err)
                     console.log(err)
                 }
             }); 
+            await emailUtils.sendWelcomeEmail(user.email)
             resolve(service.createToken(user))
         } catch (error) {
             console.log(error);
@@ -104,11 +106,24 @@ const deleteUser = async (id) =>{
     return response;
 }
 
+
+const sendForgotPasswordEmail = async(email) =>{
+    let response = false;
+    const user = await User.find({email : email}, 'password');
+    console.log(user[0]._id);
+    if(user.length >0){
+        await emailUtils.sendForgotPasswordEmail(email, user[0].password);
+        response = true
+    }
+    return response;  
+}
+
 module.exports = {
     getAllUser,
     signIn,
     signUp,
     updateUser,
     deleteUser,
-    getUserById
+    getUserById,
+    sendForgotPasswordEmail
 }

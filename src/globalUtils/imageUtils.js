@@ -9,18 +9,26 @@ const multerUserUpload = multer({
         destination : join(__dirname + '/../public/images/users'),
         filename: async (req,file,cb) =>{
             const fileExtension = extname(file.originalname);
-            let user = await userService.getUserById(req.user.sub);
+            let user = await userService.getUserById(req.headers.id);
             deleteImage(user.pfp_path);
             const fileName = user.nick;
-            req.fileName =  `${fileName}${fileExtension}`;
-            cb(null, `${fileName}${fileExtension}`)
+            if(file.originalname == "default.jpeg"){
+                req.fileName =  `default.jpeg`;
+                cb(null, `default.jpeg`)
+            }else{
+                req.fileName =  `${fileName}${fileExtension}`;
+                cb(null, `${fileName}${fileExtension}`)
+            }
         },
     }),
     fileFilter : (req,file,cb)=>{
         if(MIMETYPES.includes(file.mimetype))
             cb(null, true)
-        else
+        else{
+            console.log(file)
             cb(new Error("This image extension is not allowed"))
+        }
+            
     },
     limits : {fieldSize : 100000000}
 })

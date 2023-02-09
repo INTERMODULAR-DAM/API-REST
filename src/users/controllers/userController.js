@@ -64,6 +64,7 @@ const updateUser = async (req, res) =>{
   const {body} = req
   const {_id} = body;
   const {user} = req
+  delete body.pfp_path
   try{
     if(user.rol ||_id == user.sub){
       if(body.password){
@@ -103,6 +104,23 @@ const deleteUser = async (req,res) =>{
     }
 }
 
+
+const forgotPassword = async (req, res) =>{
+    const {email} = req.body;
+    await userService.sendForgotPasswordEmail(email)
+    .then(response =>{
+        if(response)
+          res.status(200).send({status : 200, data : "Email sent successfully"});
+        else
+          res.status(400).send({status : 400, data : "No account has this email linked, please enter a correct email adress."});
+    })
+    .catch(error=>{
+      console.log(error);
+      res.status(500).send({status : 500, data : "An internal error has ocurred"});
+    })
+
+}
+
 module.exports = {
   getAllUser,
   signIn,
@@ -110,4 +128,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserById,
+  forgotPassword,
 }
