@@ -36,7 +36,7 @@ function writePostPhotos(post, body){
     try{
         for(let i = 0; i < body.photos_path.length;i++){
             let ext = mime.getExtension(mime.getType(body.photos_path[i]));
-            let photo = post._id + `_${i}` + '.' + ext;
+            let photo = `post._id _${i}.${ext}`
             let photo_path = './src/public/images/posts/' + photo ;
             let buf = Buffer.from(body.photos[i], 'base64');
             fs.writeFileSync(photo_path, buf);
