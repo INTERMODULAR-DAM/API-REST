@@ -41,7 +41,7 @@ const createComment = async (req,res) =>{
         if(comment != null){
             res.status(200).send({status : 200, data : "The comment was created well."})
         }else{
-            res.status(400).send({status : 400, data : "We can't create the comments, please check it."})
+            res.status(400).send({status : 400, data : "We can't create the comment, please check it."})
         }
     })
     .catch(error=>{

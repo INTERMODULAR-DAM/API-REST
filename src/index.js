@@ -36,9 +36,9 @@ app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/imgs', imgRouter);
 
 const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(8081, ()=>{console.log('Servidor http corriendo en el puerto 81')})
+httpsServer.listen(8081, ()=>{console.log('Https server running on port 81')})
 
 app.listen(8080, function(){
-	console.log('Servidor http corriendo en el puerto 80');
+	console.log('Http server running on port 80');
 });
 

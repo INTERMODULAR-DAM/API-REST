@@ -6,7 +6,7 @@ const checkComment = ()=> {
     return [
         check('message')
         .notEmpty()
-        .withMessage("This comment is empty, you can't send a"),
+        .withMessage("This comment is empty, you can't send a empty comment."),
 
         check('user')
         .notEmpty()
@@ -27,7 +27,7 @@ const checkComment = ()=> {
             await Post.findById(post)
             .then(post =>{
                 if(!post)
-                    throw new Error("Post need to be real, please check");
+                    throw new Error("Post need to be real, please fix it");
             })
             .catch(error =>{})
         })

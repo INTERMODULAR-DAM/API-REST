@@ -30,10 +30,6 @@ async function encrypt(password){
     return await bcrypt.hash(password,10);   
 }
 
-async function decrypt(password){
-    return await bcrypt
-}
-
 
 async function comparePassword(userPassword, dbPassword){
     return await bcrypt.compare(userPassword, dbPassword)

@@ -8,7 +8,7 @@ const getUserById = async (req,res)=>{
   if(searchedUser != null){
     res.status(201).send({status : 201, data : searchedUser});
   }else{
-    res.status(404).send({status : 404, data : "Expired token"})
+    res.status(404).send({status : 404, data : "This user doesn't exist"})
   }
   }
   catch(error){
@@ -23,12 +23,12 @@ const getAllUser = async (req, res) =>{
         const allUsers = await userService.getAllUser();
         res.status(200).send({status : 200, data : allUsers})
       }else{
-        res.status(401).send({status : 401, data : "No tienes autorización para ello" })
+        res.status(401).send({status : 401, data : "You don't have authorization to do this." })
       }
     }
   catch(error){
     console.log(error)
-    res.status(400).send({status : 400, data : "Ha ocurrido un error inesperado"})
+    res.status(400).send({status : 400, data : "An expected error has ocurred."})
   }
 }
 
@@ -40,7 +40,7 @@ const signIn = async (req,res) =>{
     })
     .catch((error)=>{
       console.log(error)
-      res.status(401).send({status : 401, error : "Usuario no encontrado"});
+      res.status(401).send({status : 401, error : "User not found"});
     })
     
 }
@@ -57,7 +57,7 @@ const signUp = async (req, res)=>{
       } 
     }catch(error){
     console.log(error);
-    res.status(400).send({status : 400, data : "No se ha podido crear el usuario, falta algún campo por rellenar correctamente"})
+    res.status(400).send({status : 400, data : "The user could not be created, some fields have not been filled in correctly."})
     }
 }
 const updateUser = async (req, res) =>{
@@ -71,9 +71,9 @@ const updateUser = async (req, res) =>{
         body.password = await service.encrypt(body.password)
       }
       await userService.updateUser(_id, body)
-      res.status(200).send({status : 201, message : "Datos actualizados correctamente"});
+      res.status(200).send({status : 201, message : "Data has been updated successfully."});
     }else{
-      res.status(401).send({status : 401, message : "No tienes autorización para actualizar dicho usuario"})
+      res.status(401).send({status : 401, message : "You don't have authorization to update this user."})
     }
   }catch(error){
       console.log(error)
@@ -85,18 +85,18 @@ const deleteUser = async (req,res) =>{
     try{
       const{_id} = req.body;
     if(!_id){
-       return res.status(401).send({status : 401, data : "No userid"});
+       return res.status(401).send({status : 401, data : "You didn't send a user id."});
     }
       if(user.rol == true || user.sub == _id){
         response = await userService.deleteUser(_id)
         console.log(_id)
         if(response){
-          res.status(202).send({status : 202, data : "Usuario eliminado correctamente"})
+          res.status(202).send({status : 202, data : "The user has been deleted successfully."})
         }else{
-          res.status(401).send({status : 500, data : "Usuario no eliminado, no existe"})
+          res.status(401).send({status : 500, data : "User not deleted, doesn't exist."})
       }
     }else{
-      res.status(401).send({status : 401, data : "No tienes autorización para eliminar al usuario"})
+      res.status(401).send({status : 401, data : "You don't have authorization to remove this user."})
     }
     }catch(error){
       console.log(error)
@@ -110,7 +110,7 @@ const forgotPassword = async (req, res) =>{
     await userService.sendForgotPasswordEmail(email)
     .then(response =>{
         if(response)
-          res.status(200).send({status : 200, data : "Email sent successfully"});
+          res.status(200).send({status : 200, data : "The email has been sent successfully"});
         else
           res.status(400).send({status : 400, data : "No account has this email linked, please enter a correct email adress."});
     })
@@ -121,6 +121,36 @@ const forgotPassword = async (req, res) =>{
 
 }
 
+const followAUser = async (req,res) =>{
+  await userService.followAUser(req.user.sub, req.body.userToFollow)
+  .then(response =>{
+    if(response.status == 200){
+      return res.status(response.status).send({status : response.status, data : response.data});
+    }else{
+      return res.status(response.status).send({status : response.status, data : response.data});
+    }
+  })
+  .catch(error=>{
+    console.log(error)
+    return res.status(500).send({status : 500, data : "An internal error has ocurred"})
+  })
+}
+
+const unfollowAUser = async (req,res) =>{
+  await userService.unfollowAUser(req.user.sub, req.body.userToUnfollow)
+  .then(response =>{
+    if(response.status == 200){
+      return res.status(response.status).send({status : response.status, data : response.data});
+    }else{
+      return res.status(response.status).send({status : response.status, data : response.data});
+    }
+  })
+  .catch(error=>{
+    console.log(error)
+    return res.status(500).send({status : 500, data : "An internal error has ocurred"})
+  })
+}
+
 module.exports = {
   getAllUser,
   signIn,
@@ -129,4 +159,6 @@ module.exports = {
   deleteUser,
   getUserById,
   forgotPassword,
+  followAUser,
+  unfollowAUser,
 }

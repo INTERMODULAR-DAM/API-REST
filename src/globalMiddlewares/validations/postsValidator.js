@@ -1,3 +1,5 @@
+const {check} = require('express-validator');
+const User = require('../../users/models/user')
 
 
 
@@ -6,12 +8,12 @@ const postCheck = () =>{
         check('name')
         .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
-        .withMessage('Invalid name'),
+        .withMessage('You sent a invalid name, please fix it'),
 
         check('category')
         .notEmpty()
         .matches(/Hiking|Roller skating|Kayaking/g)
-        .withMessage('Invalid category, please check it'),
+        .withMessage('You sent a invalid category, please fix it'),
 
         check('distance')
         .notEmpty()
@@ -20,7 +22,7 @@ const postCheck = () =>{
         check('difficulty')
         .notEmpty()
         .matches(/Easy|Medium|Hard|Expert/g)
-        .withMessage('Invalid difficulty, please check it'),
+        .withMessage('You sent a invalid difficulty, please fix it'),
 
         check('track')
         .notEmpty()

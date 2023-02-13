@@ -82,7 +82,7 @@ const createPost = async (req,res) =>{
         } 
       }catch(error){
       console.log(error);
-      res.status(500).send({status : 500, data : "The route could not be created, some fields have not been filled in correctly." })
+      res.status(500).send({status : 500, data : "The post could not be created, some fields have not been filled in correctly." })
       }
 }
 
@@ -144,16 +144,6 @@ const deleteAllPostsByUser = async (req,res)=>{
         res.status(500).send({status : 500, data : "Internal error has ocurred"})
     }
 }
-
-// const addPhoto = async (req,res)=>{
-//     let {body} = req;
-//     const itsWrited = await postService.addPhoto(body);
-//     if(itsWrited){
-//         res.status(200).send({status : 200, data : "Foto añadida correctamente"});
-//     }else{
-//         res.status(400).send({status : 400, data : "No se ha podido añadir correctamente la foto"});
-//     }
-// }
 
 module.exports = {
     getAllPosts,

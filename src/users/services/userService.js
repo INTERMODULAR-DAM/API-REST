@@ -75,7 +75,7 @@ const signUp = async (user, body) =>{
             resolve(service.createToken(user))
         } catch (error) {
             console.log(error);
-            reject({status : 500, data : "Error inesperado"});
+            reject({status : 500, data : "Unexpected error has ocurred."});
         }
     }) 
     return token;
@@ -84,11 +84,6 @@ const signUp = async (user, body) =>{
 const updateUser = async (id, changes) =>{
     const oldUser = await User.findById(id);
     await User.findOneAndUpdate({_id : id}, changes);
-    // if(changes.pfp_path != undefined && changes.pfp !=null){
-    //     imageOperation.deleteImage(oldUser.pfp_path)
-    //     changes.pfp_path = imageOperation.writeImage(changes)
-    //     await User.findOneAndUpdate({_id : id,}, {pfp_path : changes.pfp_path})
-    // }
 }
 
 const deleteUser = async (id) =>{
@@ -118,6 +113,30 @@ const sendForgotPasswordEmail = async(email) =>{
     return response;  
 }
 
+
+const followAUser = async (user,userToFollow)=>{
+    const userDB = await User.findById(user);
+    if(!userDB.following.includes(userToFollow)){
+        userDB.following.push(userToFollow);
+        await userDB.save();
+        return {status : 200, data : "You have followed the user correctly"}
+    }else{
+        return {status : 400, data : "You already follow this user"}
+    } 
+}
+
+
+const unfollowAUser = async (user, userToUnfollow)=>{
+    const userDB = await User.findById(user);
+    if(userDB.following.includes(userToUnfollow)){
+        userDB.following = userDB.following.filter(deleteUser => deleteUser!= userToUnfollow);
+        await userDB.save();
+        return {status : 200, data : "You have unfollowed the user correctly"}
+    }else{
+        return {status : 400, data : "You don't follow this user"}
+    } 
+}
+
 module.exports = {
     getAllUser,
     signIn,
@@ -125,5 +144,7 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserById,
-    sendForgotPasswordEmail
+    sendForgotPasswordEmail,
+    followAUser,
+    unfollowAUser
 }

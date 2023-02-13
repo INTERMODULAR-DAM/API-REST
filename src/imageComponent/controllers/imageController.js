@@ -16,7 +16,12 @@ const uploadUserPFP = async (req,res)=>{
     
 }
 const uploadPostPhotos = async(req,res) =>{
-
+    let {response} = req
+        if(response){
+            res.status(200).send({status : 200, data : "The photo has uploaded successfully"});
+        }else{
+            res.status(400).send({status : 400, data : "The photo has not been uploaded. The limit is 7"});
+        }
 }
 
 

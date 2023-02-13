@@ -2,8 +2,10 @@ const MIMETYPES = ['image/jpg', 'image/jpeg', 'image/png']
 const multer = require('multer');
 const {join, extname} = require('path');
 const fs = require('fs');
+const Post = require('../posts/models/post')
+
 const userService = require('../users/services/userService');
-const postService = require('../posts/services/postService')
+
 
 const multerUserUpload = multer({
     storage : multer.diskStorage({
@@ -37,15 +39,17 @@ const multerUserUpload = multer({
 const multerPostUpload = multer({
    storage :  multer.diskStorage({
     destination : join(__dirname + '/../public/images/posts'),
-    filename : async (req,files,cb)=> {
+    filename :  (req,files,cb)=> {
         const {id} = req.headers;
-        post = await postService.getPostById(id);
-        if(post.photos == 7)
-            cb(new Error("The post reached its limit", false))
-        let numberImage = post.photos;
-        const fileExtension = extname(files.originalname)
-        req.fileName = `${id}_${numberImage}${fileExtension}`
-        cb(null, req.fileName)
+        if(post.photos >= 7){
+            req.response = false;
+            cb(new Error("Can't upload"))
+        }else{
+            const fileExtension = extname(files.originalname)
+            let name = `${id}_${numberImage}${fileExtension}`;
+            req.response = true
+            cb(null, name)
+        }
     }
    }),
    fileFilter : (req,file,cb)=>{

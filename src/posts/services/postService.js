@@ -40,7 +40,7 @@ const createPost = async (body) =>{
             new Post({...body}).save(async (error,post)=>{
                 if(error){
                     console.log(error)
-                    reject({status : 404, data : "No se pudo crear la ruta"})
+                    reject({status : 404, data : "The post could not be created"})
                 }
                 if(body.photos != undefined){
                     //post = writePostPhotos(post, body);
@@ -49,9 +49,9 @@ const createPost = async (body) =>{
                 }
                 await Post.updateOne({_id : post._id},{photos : post.photos});
             })
-            resolve("Ruta creada correctamente")
+            resolve("The post has been created.")
         } catch (error) {
-            reject({status : 500, data : "Error al crear la ruta"})
+            reject({status : 500, data : "An error has ocurren while creating the post"})
         }
     });
 }
@@ -92,20 +92,6 @@ const updatePost = async (id, newData) =>{
     })
 }
 
-// const addPhoto = async(body) =>{
-//     const post = await Post.findOne({_id : body.id});
-//     await writePostPhoto(post, body).then(async updated =>{
-//         await Post.updateOne(updated);
-//         return true;
-//     })
-//     .catch(error =>{
-//         console.log(error);
-//         return false
-//     })  
-// }
-
-
-
 module.exports = {
     getAllPosts,
     createPost,
@@ -116,5 +102,4 @@ module.exports = {
     getAllUserOwnPost,
     getAllUserPost,
     getAllPublicPosts,
-    // addPhoto
 }

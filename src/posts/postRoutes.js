@@ -2,7 +2,7 @@ let express = require('express');
 let router = express();
 const auth = require('../globalMiddlewares/auth');
 const postController = require('./controllers/postController');
-const validation = require('../globalMiddlewares/validations/commentsValidator');
+const validation = require('../globalMiddlewares/validations/postsValidator');
 const checkErrors = require('../globalMiddlewares/checkErrorsValidation');
 
 router
@@ -11,8 +11,8 @@ router
   .get('/allOwnPosts', auth, postController.getAllUserOwnPost)
   .get('/allUserPosts',auth, postController.getAllUserPost)
   .get('/getPublicPosts', auth, postController.getAllPublicPosts)
-  .post('/', auth, validation, checkErrors,postController.createPost)
-  .patch('/', auth, validation, checkErrors, postController.updatePost)
+  .post('/', auth, validation(), checkErrors,postController.createPost)
+  .patch('/', auth, validation(), checkErrors, postController.updatePost)
   // .patch('/addPhoto', auth, postController.addPhoto)
   .delete('/', auth, postController.deletePost)
   .delete('/all', auth, postController.deleteAllPostsByUser)

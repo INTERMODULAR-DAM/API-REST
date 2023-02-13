@@ -13,6 +13,8 @@ router
   .post('/signIn', userController.signIn)
   .post('/signUp',validation.signUpCheck(), checkErrors, userController.signUp)
   .patch('/', auth, validation.updateUserCheck(), checkErrors, userController.updateUser)
+  .patch('/follow', auth, userController.followAUser)
+  .patch('/unfollow', auth, userController.unfollowAUser)
   .delete('/', auth, userController.deleteUser)
 
 module.exports = router;

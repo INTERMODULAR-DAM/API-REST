@@ -7,51 +7,51 @@ const signUpCheck = ()=>{
         .trim()
         .notEmpty()
         .isEmail()
-        .withMessage("Invalid email")
+        .withMessage("You sent a invalid email, please fix it")
         .custom(async (email)=>{
             const searchedEmail = await User.find({email : email});
             if(searchedEmail.length > 0)
-                throw new Error("Email already in use")
+                throw new Error("This email is already in use")
         }),
 
         check('nick')
         .trim()
         .notEmpty()
         .isAlphanumeric()
-        .withMessage('Invalid nick')
+        .withMessage('You sent a invalid nick, please fix it')
         .custom(async (nick) =>{
             const searchedNick = await User.find({nick : nick})
             if(searchedNick.length > 0)
-                throw new Error('Nick already in use')
+                throw new Error('This nick is already in use')
         }),
 
         check('phone_number')
         .trim()
         .notEmpty()
         .isMobilePhone('es-ES')
-        .withMessage('Invalid phone number')
+        .withMessage('You sent a invalid phone number, please fix it')
         .custom(async (phone)=>{
             const searchedPhone = await User.find({phone_number : phone})
             if(searchedPhone.length > 0)
-                throw new Error('Phone number already in use')
+                throw new Error('This phone number is already in use')
         }),
 
         check('name')
         .trim()
         .notEmpty()
         .isAlpha()
-        .withMessage("Invalid name"),
+        .withMessage("You sent a invalid name, please fix it"),
 
         check('lastname')
         .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
-        .withMessage("Invalid lastname"),
+        .withMessage("You sent a invalid lastname, please fix it"),
 
         check('password')
         .trim()
         .notEmpty()
         .isStrongPassword()
-        .withMessage("Weak password")
+        .withMessage("You sent a weak password , please fix it")
     ]
 }
 
@@ -60,30 +60,31 @@ const updateUserCheck = ()=>{
         check('email')
         .trim()
         .notEmpty()
-        .isEmail(),
+        .isEmail()
+        .withMessage("You sent a invalid email, please fix it"),
 
         check('nick')
         .trim()
         .notEmpty()
         .isAlphanumeric()
-        .withMessage('Invalid nick'),
+        .withMessage('You sent a invalid nick, please fix it'),
 
         check('phone_number')
         .trim()
         .notEmpty()
         .isMobilePhone('es-ES')
-        .withMessage('Invalid phone number'),
+        .withMessage('You sent a invalid phone number, please fix it'),
 
         check('name')
         .trim()
         .notEmpty()
         .isAlpha()
-        .withMessage("Invalid name"),
+        .withMessage("You sent a invalid name, please fix it"),
 
         check('lastname')
         .notEmpty()
         .isAlpha('es-ES', {ignore : ' '})
-        .withMessage("Invalid lastname"),
+        .withMessage("You sent a invalid lastname, please fix it"),
     ]
 }
 
