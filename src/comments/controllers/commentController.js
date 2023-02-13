@@ -30,12 +30,12 @@ const getAllPostsComments = async (req,res) =>{
     .catch(error=>{
         console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred, please contact with your administrator."})
-    })
-    
+    }) 
 }
 
 const createComment = async (req,res) =>{
     const {body} = req;
+    body.id = req.user.sub;
     await commentService.createComment(body)
     .then(comment =>{
         if(comment != null){

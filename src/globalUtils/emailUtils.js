@@ -5,14 +5,14 @@ let transporter = nodemailer.createTransport({
     port: 587,
     secure: false, 
     auth: {
-      user: "wikitrail@outlook.es",
-      pass: "intermodulardam1234", 
+      user: "wikitrail@outlook.com",
+      pass: "DAM1234+", 
   }});
 
 
 const sendForgotPasswordEmail = async (email, password)=>{
     await transporter.sendMail({
-        from : 'WikiTrail S.L <wikitrail@outlook.es>',
+        from : 'WikiTrail S.L <wikitrail@outlook.com>',
         to : email,
         subject : "Forgot password?",
         html : `<h1> Forgot password?</h1> <p> Your current password is <b>${password}</b></p>`
