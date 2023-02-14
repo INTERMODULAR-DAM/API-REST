@@ -2,7 +2,6 @@ const MIMETYPES = ['image/jpg', 'image/jpeg', 'image/png']
 const multer = require('multer');
 const {join, extname} = require('path');
 const fs = require('fs');
-const Post = require('../posts/models/post')
 
 const userService = require('../users/services/userService');
 

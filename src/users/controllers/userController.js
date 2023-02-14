@@ -49,7 +49,7 @@ const signUp = async (req, res)=>{
     let {body} = req;
     try{
       const newUser = await userUtils.createUser(body);
-      const createdUser = await userService.signUp(newUser,body);
+      const createdUser = await userService.signUp(newUser);
       if(createdUser.status == undefined){
         res.status(200).send({status : 200, data : createdUser })
       }else{

@@ -30,7 +30,6 @@ async function createUser(data){
     }
   
 function changeTypes(model){
-    console.log(model.admin)
     model.phone_number = Number(model.phone_number);
     if(model.web == undefined || model.web == '')
       delete model.web;

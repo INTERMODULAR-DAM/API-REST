@@ -61,23 +61,33 @@ const signIn = async (userId,password) =>{
     })     
 }
 
-const signUp = async (user, body) =>{
+const signUp = async (user) =>{
+    let token;
     user.password = await service.encrypt(user.password);
-    let token= await new Promise(async (resolve,reject) =>{
+    let response= await new Promise(async (resolve,reject) =>{
          try {
-            new User({...user}).save((err) => {
+             new User(user).save((err) => {
                 if (err) {
-                    reject(err)
+                    reject(false)
                     console.log(err)
-                }
+                }  
             }); 
-            await emailUtils.sendWelcomeEmail(user.email)
-            resolve(service.createToken(user))
+            resolve(true);
         } catch (error) {
             console.log(error);
-            reject({status : 500, data : "Unexpected error has ocurred."});
+            reject(false);
         }
     }) 
+
+    console.log(response)
+    if(response){
+        
+        let newUser = await User.findOne({email : user.email});
+        //await emailUtils.sendWelcomeEmail(user.email)
+        token = service.createToken(newUser)
+    }else{
+        return {status : 400, data : "Some fields were bad, please fix it."}
+    }
     return token;
 }
 

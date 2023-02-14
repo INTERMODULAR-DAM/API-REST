@@ -6,7 +6,7 @@ let transporter = nodemailer.createTransport({
     secure: false, 
     auth: {
       user: "wikitrail@outlook.com",
-      pass: "DAM1234+", 
+      pass: "DAM2223+", 
   }});
 
 
@@ -22,7 +22,7 @@ const sendForgotPasswordEmail = async (email, password)=>{
 
 const sendWelcomeEmail = async(email)=>{
     await transporter.sendMail({
-        from : 'WikiTrail S.L <wikitrail@outlook.es>',
+        from : 'WikiTrail S.L <wikitrail@outlook.com>',
         to : email,
         subject : "Welcome to WikiTrail!",
         html : `<h1>Welcome to our app!</h1> <p> We're so happy that you trust in our app! Visit the <b>published routes</b> or <b>create one yourself</b> to share it with others!<br> <h4>We are waiting for you!</h4></p>`
