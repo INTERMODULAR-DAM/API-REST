@@ -39,7 +39,7 @@ const signUpCheck = ()=>{
         check('name')
         .trim()
         .notEmpty()
-        .isAlpha()
+        .isAlpha('es-ES', {ignore : ' '})
         .withMessage("You sent a invalid name, please fix it"),
 
         check('lastname')

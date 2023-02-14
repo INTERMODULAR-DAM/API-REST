@@ -2,13 +2,14 @@ const User = require('../models/user')
 const service = require('../../globalServices/autentication');
 const {identifyId} = require('../utils/userUtils');
 const postService = require('../../posts/services/postService');
-const emailUtils = require('../../globalUtils/emailUtils')
+const emailUtils = require('../../globalUtils/emailUtils');
+const {deleteImage} = require('../../globalUtils/imageUtils');
 const dotenv = require('dotenv');
 dotenv.config();
 
 
 const getUserById = async (_id)=>{
-    return await User.findById(_id)
+    return await User.findById(_id);
 
 }
 
@@ -62,32 +63,21 @@ const signIn = async (userId,password) =>{
 }
 
 const signUp = async (user) =>{
-    let token;
     user.password = await service.encrypt(user.password);
-    let response= await new Promise(async (resolve,reject) =>{
+    let token= await new Promise(async (resolve,reject) =>{
          try {
-             new User(user).save((err) => {
+             new User(user).save((err, newUser) => {
                 if (err) {
-                    reject(false)
+                    reject({status : 400, data : "Some fields were bad, please fix it."})
                     console.log(err)
-                }  
+                } 
+                resolve(service.createToken(newUser)); 
             }); 
-            resolve(true);
         } catch (error) {
             console.log(error);
-            reject(false);
+            reject({status : 400, data : "Some fields were bad, please fix it."});
         }
     }) 
-
-    console.log(response)
-    if(response){
-        
-        let newUser = await User.findOne({email : user.email});
-        //await emailUtils.sendWelcomeEmail(user.email)
-        token = service.createToken(newUser)
-    }else{
-        return {status : 400, data : "Some fields were bad, please fix it."}
-    }
     return token;
 }
 
@@ -102,7 +92,7 @@ const deleteUser = async (id) =>{
     response = false;
     if(result != null){
         response = true;
-        // imageOperation.deleteImage(result.pfp_path);
+        deleteImage(result.pfp_path);
         postService.deleteAllPostsByUser(id);
     }
     }).catch(error => {
@@ -156,5 +146,5 @@ module.exports = {
     getUserById,
     sendForgotPasswordEmail,
     followAUser,
-    unfollowAUser
+    unfollowAUser,
 }

@@ -84,6 +84,7 @@ const updateUser = async (req, res) =>{
 const deleteUser = async (req,res) =>{
     try{
       const{_id} = req.body;
+      const {user} = req;
     if(!_id){
        return res.status(401).send({status : 401, data : "You didn't send a user id."});
     }

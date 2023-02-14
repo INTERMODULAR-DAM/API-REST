@@ -3,7 +3,7 @@ const multer = require('multer');
 const {join, extname} = require('path');
 const fs = require('fs');
 
-const userService = require('../users/services/userService');
+const User = require('../users/models/user');
 
 
 const multerUserUpload = multer({
@@ -11,7 +11,7 @@ const multerUserUpload = multer({
         destination : join(__dirname + '/../public/images/users'),
         filename: async (req,file,cb) =>{
             const fileExtension = extname(file.originalname);
-            let user = await userService.getUserById(req.headers.id);
+            let user = await User.findById(req.headers.id)
             deleteImage(user.pfp_path);
             const fileName = user.nick;
             if(file.originalname == "default.jpeg"){
