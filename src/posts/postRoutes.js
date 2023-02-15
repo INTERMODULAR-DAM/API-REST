@@ -13,7 +13,6 @@ router
   .get('/getPublicPosts', auth, postController.getAllPublicPosts)
   .post('/', auth, validation(), checkErrors,postController.createPost)
   .patch('/', auth, validation(), checkErrors, postController.updatePost)
-  // .patch('/addPhoto', auth, postController.addPhoto)
   .delete('/', auth, postController.deletePost)
   .delete('/all', auth, postController.deleteAllPostsByUser)
 

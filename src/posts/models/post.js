@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
     category : {
         type : String, 
         require : true,
-        enum : ["Hiking", "Roller skating", "Kayaking"]
+        enum : ["Hiking", "Roller Skating", "Kayaking"]
     },
     distance : {
         type : String,

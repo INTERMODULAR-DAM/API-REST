@@ -12,7 +12,7 @@ const postCheck = () =>{
 
         check('category')
         .notEmpty()
-        .matches(/Hiking|Roller skating|Kayaking/g)
+        .matches(/Hiking|Roller Skating|Kayaking/g)
         .withMessage('You sent a invalid category, please fix it'),
 
         check('distance')

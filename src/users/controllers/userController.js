@@ -2,9 +2,14 @@ const userService = require('../services/userService');
 const userUtils = require('../utils/userUtils');
 
 const getUserById = async (req,res)=>{
-  let {user} = req
+  let _id;
+  if(req.body._id != undefined){
+    _id = req.body._id
+  }else{
+    _id = req.user.sub
+  }
   try{
-    const searchedUser = await userService.getUserById(user.sub)
+    const searchedUser = await userService.getUserById(_id)
   if(searchedUser != null){
     res.status(201).send({status : 201, data : searchedUser});
   }else{
