@@ -2,7 +2,6 @@ const imageService = require('../services/imageService')
 
 
 const uploadUserPFP = async (req,res)=>{
-    console.log(req.file)
     await imageService.uploadUserPFP(req.headers.id, req.fileName)
     .then(response =>{
         if(response){

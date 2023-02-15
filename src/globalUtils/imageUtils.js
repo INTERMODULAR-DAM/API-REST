@@ -14,6 +14,7 @@ const multerUserUpload = multer({
             let user = await User.findById(req.headers.id)
             deleteImage(user.pfp_path);
             const fileName = user.nick;
+            console.log(file.originalname)
             if(file.originalname == "default.jpeg"){
                 req.fileName =  `default.jpeg`;
                 cb(null, `default.jpeg`)
@@ -63,7 +64,7 @@ const multerPostUpload = multer({
 })
 
 function deleteImage(pfp){
-    if(pfp != 'default.jpeg'){
+    if(pfp != "default.jpeg"){
         let path = './src/public/images/users/' + pfp;
         fs.unlinkSync(path);
       }
