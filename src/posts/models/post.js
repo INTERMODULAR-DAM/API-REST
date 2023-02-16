@@ -36,10 +36,9 @@ const postSchema = new mongoose.Schema({
         type : String, 
         maxlength : 200,
     },
-    photos : {
-        type : Number,
-        default : 0,
-    },
+    photos : [{
+        type : String
+    }],
 
     privacity : {
         type : Boolean,

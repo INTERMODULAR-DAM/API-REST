@@ -1,4 +1,6 @@
 const Post = require('../models/post');
+const {deleteImages} = require('../../globalUtils/imageUtils')
+const {deleteCommentsByPost} = require('../../comments/services/commentService')
 
 
 const getAllPosts = async ()=>{
@@ -42,11 +44,6 @@ const createPost = async (body) =>{
                     console.log(error)
                     reject({status : 404, data : "The post could not be created"})
                 }
-                if(body.photos != undefined){
-                    //post = writePostPhotos(post, body);
-                }else{
-                   // post.photos.push("noPhotos.png");
-                }
                 await Post.updateOne({_id : post._id},{photos : post.photos});
             })
             resolve("The post has been created.")
@@ -57,10 +54,13 @@ const createPost = async (body) =>{
 }
 
 const deleteAllPostsByUser = async (id) =>{
-    await Post.deleteMany({user : id})
+    return await Post.find({user : id})
     .then((posts)=>{
-        // for(let post in posts){
-        // }
+        posts.forEach( async post=>{
+            await Post.findByIdAndRemove(post._id)
+            deleteImages(post._id, post.photos);
+            deleteCommentsByPost(post._id);
+        })
         return true;
     })
     .catch(error =>{
@@ -74,7 +74,8 @@ const deletePostById = async (id)=>{
     await Post.findByIdAndDelete(id)
     .then(async (postFound) =>{
         if(postFound != null){
-            //deletePostPhotos(postFound)
+            deleteImages(postFound._id, postFound.photos)
+            deleteCommentsByPost(postFound._id)
             response = true;
         }
     })
@@ -86,7 +87,7 @@ const deletePostById = async (id)=>{
 
 
 const updatePost = async (id, newData) =>{
-    return await Post.updateOne({_id : id}, newData).clone()
+    return await Post.updateOne({_id : id}, newData)
     .catch(error =>{
         console.log(error)
     })

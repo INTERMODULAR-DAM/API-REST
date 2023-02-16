@@ -2,7 +2,6 @@ const MIMETYPES = ['image/jpg', 'image/jpeg', 'image/png']
 const multer = require('multer');
 const {join, extname} = require('path');
 const fs = require('fs');
-
 const User = require('../users/models/user');
 
 
@@ -14,12 +13,9 @@ const multerUserUpload = multer({
             let user = await User.findById(req.headers.id)
             deleteImage(user.pfp_path);
             const fileName = user.nick;
-            console.log(file.originalname)
             if(file.originalname == "default.jpeg"){
-                req.fileName =  `default.jpeg`;
                 cb(null, `default.jpeg`)
             }else{
-                req.fileName =  `${fileName}${fileExtension}`;
                 cb(null, `${fileName}${fileExtension}`)
             }
         },
@@ -38,39 +34,69 @@ const multerUserUpload = multer({
 
 const multerPostUpload = multer({
    storage :  multer.diskStorage({
-    destination : join(__dirname + '/../public/images/posts'),
-    filename :  (req,files,cb)=> {
-        const {id} = req.headers;
-        if(post.photos >= 7){
-            req.response = false;
+    destination : (req,files,cb)=>{
+        const {_id} = req.headers;
+        let path = __dirname + '/../public/images/posts/' + _id;
+        if(fs.existsSync(path)){
+            cb(null, path);
+        }else{
+            fs.mkdir(path,(error,dir)=>{
+                cb(error, path);
+            });
+        }
+    },
+    filename :  async (req,files,cb)=> {
+        const {_id} = req.headers;
+        let path = __dirname + '/../public/images/posts/' + _id;
+        
+        let numPhotos = await new Promise((resolve,reject)=>{
+            fs.readdir(path, (error, files)=>{
+                if(error){
+                    cb(error); 
+                }
+                resolve(files.length);
+            });
+        }) 
+        if(numPhotos >= 7){
             cb(new Error("Can't upload"))
+
         }else{
             const fileExtension = extname(files.originalname)
-            let name = `${id}_${numberImage}${fileExtension}`;
-            req.response = true
-            cb(null, name)
+            let name = `${_id}_${numPhotos}${fileExtension}`;
+            cb(null,name)
         }
     }
    }),
-   fileFilter : (req,file,cb)=>{
-        if(MIMETYPES.includes(file.mimetype))
+   fileFilter : (req,files,cb)=>{
+        if(MIMETYPES.includes(files.mimetype))
             cb(null, true)
         else{
-            console.log(file)
+            console.log(files)
             cb(new Error("This image extension is not allowed"))
         }     
     },
-    limits : {fieldSize : 100000000}
+    limits : {fieldSize : 10000000}
 })
 
 function deleteImage(pfp){
-    if(pfp != "default.jpeg"){
-        let path = './src/public/images/users/' + pfp;
+    let path = './src/public/images/users/' + pfp;
+    console.log()
+    if(pfp != "default.jpeg" && fs.existsSync(path)){
+        console.log("borrado")
         fs.unlinkSync(path);
       }
 }
 
+function deleteImages(id){
+    let path = `./src/public/images/posts/${id}`
+    if(fs.existsSync(path)){
+        fs.rm(path, { recursive: true }, ()=>{console.log("folder removed")});
+        }
+}
+
 module.exports = {
     multerUserUpload,
-    multerPostUpload
+    multerPostUpload,
+    deleteImages,
+    deleteImage,
 }

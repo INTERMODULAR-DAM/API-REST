@@ -2,6 +2,7 @@ const User = require('../models/user')
 const service = require('../../globalServices/autentication');
 const {identifyId} = require('../utils/userUtils');
 const postService = require('../../posts/services/postService');
+const commentService = require('../../comments/services/commentService')
 const emailUtils = require('../../globalUtils/emailUtils');
 const {deleteImage} = require('../../globalUtils/imageUtils');
 const dotenv = require('dotenv');
@@ -89,12 +90,14 @@ const updateUser = async (id, changes) =>{
 const deleteUser = async (id) =>{
     let response;
     await User.findOneAndDelete({_id : id}).then(result => {
-    response = false;
-    if(result != null){
-        response = true;
-        deleteImage(result.pfp_path);
-        postService.deleteAllPostsByUser(id);
-    }
+        response = false;
+        if(result != null){
+            response = true;
+            console.log(result.pfp_path)
+            deleteImage(result.pfp_path);
+            postService.deleteAllPostsByUser(id);
+            commentService.deleteCommentsByUser(id);
+        }
     }).catch(error => {
       console.log(error);
     })

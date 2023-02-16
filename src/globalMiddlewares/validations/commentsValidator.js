@@ -10,15 +10,13 @@ const checkComment = ()=> {
 
         check('user')
         .notEmpty()
-        .custom(async user =>{
+        .custom(async user=>{
             await User.findById(user)
-            .then(user =>{
-                if(!user)
-                    throw new Error("User need to be real, please fix it");
+            .then(userFound=>{
+                if(!userFound)
+                    throw new Error("User need to be real, please check")
             })
-            .catch(error=>{
-                console.log(error);
-            })
+            
         }),
 
         check('post')
@@ -29,7 +27,6 @@ const checkComment = ()=> {
                 if(!post)
                     throw new Error("Post need to be real, please fix it");
             })
-            .catch(error =>{})
         })
     ]
 }

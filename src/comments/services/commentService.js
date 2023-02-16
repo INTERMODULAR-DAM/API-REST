@@ -50,12 +50,35 @@ const deleteAll = async (req,res) =>{
     })
 }
 
+const deleteCommentsByUser = async(id) =>{
+    await Comment.deleteMany({user : id})
+    .then(comments=>{
+        console.log(comments)
+    })
+    .catch(error =>{
+        console.log(error);
+    })
+}
+
+
+const deleteCommentsByPost = async(id) =>{
+    await Comment.deleteMany({post : id})
+    .then(comments=>{
+        console.log(comments)
+    })
+    .catch(error =>{
+        console.log(error);
+    })
+}
 
 module.exports = {
     getAllComments,
     getAllPostsComments,
+    getCommentById,
     createComment,
     deleteComment,
     deleteAll,
-    getCommentById
+    deleteCommentsByUser,
+    deleteCommentsByPost
+
 }

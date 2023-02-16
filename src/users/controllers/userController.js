@@ -40,7 +40,6 @@ const getAllUser = async (req, res) =>{
 const signIn = async (req,res) =>{
   await userService.signIn(req.body.id, req.body.password)
     .then((response)=>{
-      console.log(response)
       res.status(response.status).send({status : response.status, data : response.data});
     })
     .catch((error)=>{
