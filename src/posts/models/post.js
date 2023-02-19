@@ -45,7 +45,6 @@ const postSchema = new mongoose.Schema({
         default : false,
         require : true
     },
-    company : String,
     user : {
         type : mongoose.Schema.ObjectId, ref:"User",
         require : true

@@ -23,6 +23,13 @@ const getAllUser = async () =>{
       return allUsers;
 }
 
+const getFollowers = async (id)=>{
+    return await User.find({following : [id]})
+    .catch(error=>{
+        console.log(error);
+    })
+}
+
 const signIn = async (userId,password) =>{
     const searchedUser = await identifyId(userId, password);
     const MAX_LOGIN_ATTEMPS = 5
@@ -108,7 +115,6 @@ const deleteUser = async (id) =>{
 const sendForgotPasswordEmail = async(email) =>{
     let response = false;
     const user = await User.find({email : email}, 'password');
-    console.log(user[0]._id);
     if(user.length >0){
         await emailUtils.sendForgotPasswordEmail(email, user[0].password);
         response = true
@@ -150,4 +156,5 @@ module.exports = {
     sendForgotPasswordEmail,
     followAUser,
     unfollowAUser,
+    getFollowers,
 }

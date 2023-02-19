@@ -37,6 +37,21 @@ const getAllUser = async (req, res) =>{
   }
 }
 
+const getFollowers = async (req,res) =>{
+    const {_id} = req.body;
+    await userService.getFollowers(_id)
+    .then(followers =>{
+      if(followers){
+        return res.status(200).send({status: 200, data : followers});
+      }
+      return res.status(400).send({status : 400, data : "Something went wrong, please try again."})
+    })
+    .catch(error=>{
+      console.log(error);
+      return res.status(500).send({status : 500, data : "An internal error has ocurred, please contact with your administrator"})
+    })
+}
+
 const signIn = async (req,res) =>{
   await userService.signIn(req.body.id, req.body.password)
     .then((response)=>{
@@ -166,4 +181,5 @@ module.exports = {
   forgotPassword,
   followAUser,
   unfollowAUser,
+  getFollowers,
 }
