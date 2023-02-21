@@ -25,8 +25,8 @@ const postSchema = new mongoose.Schema({
         require : true
     },
     track : [{
-        lat : String,
-        lng : String
+        lat : Number,
+        lng : Number
     }],
     duration : {
         type : String,
