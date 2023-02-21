@@ -8,7 +8,8 @@ const getAllPosts = async(req,res)=>{
     try{
         if(user.rol == true){
             const allPosts = await postService.getAllPosts();
-            res.status(200).send({status : 200, allPosts})
+            console.log(allPosts)
+            res.status(200).send({status : 200, data : allPosts})
         }else{
             res.status(401).send({status :401, data : "You dont have authorization" }) 
         }
