@@ -24,7 +24,6 @@ const multerUserUpload = multer({
         if(MIMETYPES.includes(file.mimetype))
             cb(null, true)
         else{
-            console.log(file)
             cb(new Error("This image extension is not allowed"))
         }
             
@@ -71,7 +70,6 @@ const multerPostUpload = multer({
         if(MIMETYPES.includes(files.mimetype))
             cb(null, true)
         else{
-            console.log(files)
             cb(new Error("This image extension is not allowed"))
         }     
     },
@@ -80,9 +78,7 @@ const multerPostUpload = multer({
 
 function deleteImage(pfp){
     let path = './src/public/images/users/' + pfp;
-    console.log()
     if(pfp != "default.jpeg" && fs.existsSync(path)){
-        console.log("borrado")
         fs.unlinkSync(path);
       }
 }

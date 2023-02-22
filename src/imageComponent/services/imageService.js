@@ -13,7 +13,6 @@ const uploadPostPhotos = async (files, id)=>{
     for(let i = 0; i < files.length;i++){
         photos.push(files[i].filename)
     }
-    console.log(photos)
     return await Post.findByIdAndUpdate(id, {photos: photos})
     .catch(error =>{
         console.log(error);

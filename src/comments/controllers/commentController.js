@@ -11,7 +11,6 @@ const getAllComments = async (req,res) =>{
             res.status(401).send({status : 401, data : "You don't have authorization."})
         }
     }catch(error){
-    console.log(error);
     res.status(500).send({status : 500, data : "An internal error has ocurred, please contact with your administrator."})
     }
 }
@@ -28,7 +27,6 @@ const getAllPostsComments = async (req,res) =>{
         }
     })
     .catch(error=>{
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred, please contact with your administrator."})
     }) 
 }
@@ -45,7 +43,6 @@ const createComment = async (req,res) =>{
         }
     })
     .catch(error=>{
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred"});
     })
 }
@@ -63,7 +60,6 @@ const deleteComment = async (req,res) =>{
             res.status(400).send({status : 400, data : "You don't have authorization."})
         } 
     }catch(error){
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred."})
     }
 }

@@ -109,7 +109,6 @@ const deleteUser = async (req,res) =>{
     }
       if(user.rol == true || user.sub == _id){
         response = await userService.deleteUser(_id)
-        console.log(_id)
         if(response){
           res.status(202).send({status : 202, data : "The user has been deleted successfully."})
         }else{

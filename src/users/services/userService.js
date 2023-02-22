@@ -33,17 +33,17 @@ const getFollowers = async (id)=>{
 const signIn = async (userId,password) =>{
     const searchedUser = await identifyId(userId, password);
     const MAX_LOGIN_ATTEMPS = 5
-    const LOCK_TIME= 4*60*60*1000
+    const LOCK_TIME= 4*60*1000
     let now = Date.now();
-    let isLocked = searchedUser.lock_until > now;
-    let hasLockExpired = searchedUser.lock_until < now;
-
+    let isLocked = false;
+    let hasLockExpired = false
+    isLocked = searchedUser.lock_until > now;
+    hasLockExpired = searchedUser.lock_until < now;
     if(isLocked){
         return { status : 400, data : "The account is locked, please wait to sign in"}
     }
 
     if(hasLockExpired){
-        console.log("Expirado")
         searchedUser.lock_until = undefined;
         searchedUser.login_attempts = 0;
         await searchedUser.save();
