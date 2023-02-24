@@ -49,7 +49,7 @@ const createComment = async (req,res) =>{
 
 const deleteComment = async (req,res) =>{
     let {user} = req;
-    const {_id} = req.body;
+    const {_id} = req.query;
     const comment = await commentService.getCommentById(_id);
     try{
         if(user.sub == comment.user || user.rol == true){
