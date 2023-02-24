@@ -3,8 +3,8 @@ const userUtils = require('../utils/userUtils');
 
 const getUserById = async (req,res)=>{
   let _id;
-  if(req.body._id != undefined){
-    _id = req.body._id
+  if(req.headers._id != undefined){
+    _id = req.headers._id
   }else{
     _id = req.user.sub
   }
