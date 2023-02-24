@@ -8,14 +8,12 @@ const getAllPosts = async(req,res)=>{
     try{
         if(user.rol == true){
             const allPosts = await postService.getAllPosts();
-            console.log(allPosts)
             res.status(200).send({status : 200, data : allPosts})
         }else{
             res.status(401).send({status :401, data : "You dont have authorization" }) 
         }
     }catch(error){
-        console.log(error)
-        res.status(403).send({status : 403, data : "An internal error has ocurred"})
+        res.status(500).send({status : 500, data : "An internal error has ocurred"})
     }            
 }
 
@@ -26,7 +24,6 @@ const getAllUserOwnPost = async (req,res)=>{
         res.status(200).send({status : 200, data : allUserPosts})
     }
     catch(error){
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred"});
     }
 }
@@ -38,11 +35,8 @@ const getAllUserPost = async (req,res)=>{
         const allUserPosts = await postService.getAllUserPost(_id);
         res.status(200).send({status : 200, data : allUserPosts})
     } catch (error) {
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred"});
-    }       
-   
-        
+    }            
 }
 
 const getAllPublicPosts = async (req,res)=>{
@@ -50,13 +44,12 @@ const getAllPublicPosts = async (req,res)=>{
         const allPublicPosts = await postService.getAllPublicPosts()
         res.status(200).send({status : 200, data : allPublicPosts})
     }catch(error){
-        console.log(error)
-        res.status(200).send({status : 200, data : "An internal error has ocurred"})
+        res.status(500).send({status : 500, data : "An internal error has ocurred"})
     }
 }
 
 const getPostById = async(req,res)=>{
-    const {_id} = req.body;
+    const {_id} = req.headers;
     try{
         const post = await postService.getPostById(_id);
         if(post != null){
@@ -65,7 +58,6 @@ const getPostById = async(req,res)=>{
           res.status(404).send({status : 404, data : "This post doesn't exists"});
         }
     }catch(error){
-      console.log(error)
       res.status(500).send({status : 500, data : "You don't have authorization."})
     }
 
@@ -82,7 +74,6 @@ const createPost = async (req,res) =>{
          res.status(401).send(newPost)
         } 
       }catch(error){
-      console.log(error);
       res.status(500).send({status : 500, data : "The post could not be created, some fields have not been filled in correctly." })
       }
 }
@@ -92,7 +83,6 @@ const updatePost = async(req,res)=>{
     const {body} = req;
     await postService.updatePost(body._id, body)
     .then(post =>{
-        console.log(post)
         if(post != null){
             res.status(200).send({status : 200, data : "Post updated"});
         }else{
@@ -100,11 +90,8 @@ const updatePost = async(req,res)=>{
         }
     })
     .catch(error =>{
-        console.log(error);
         res.status(500).send({status : 500, data : "An internal error has ocurred"})
     })
-
-
 }
 
 
@@ -119,11 +106,8 @@ const deletePost = async(req,res)=>{
         }
     })
     .catch(error =>{
-        console.log(error)
         res.status(500).send({status : 500, data : "Error interno del servidor"})
     })
-
-
 }
 
 const deleteAllPostsByUser = async (req,res)=>{
@@ -141,7 +125,6 @@ const deleteAllPostsByUser = async (req,res)=>{
         }
     }
     catch(error){
-        console.log(error);
         res.status(500).send({status : 500, data : "Internal error has ocurred"})
     }
 }

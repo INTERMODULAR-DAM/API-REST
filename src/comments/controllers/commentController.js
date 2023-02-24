@@ -78,7 +78,7 @@ const deleteAll = async (req,res) =>{
             res.status(400).send({status : 400, data : "You don't have authorization"})
         }
     }catch(error){
-        console.log(error);   
+        res.status(500).send({status : 500, data : "An internal error has ocurred"})  
     }
 }
 

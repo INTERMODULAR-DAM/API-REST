@@ -3,9 +3,6 @@ const Post = require('../../posts/models/post')
 
 const uploadUserPFP = async (userId,fileName)=>{
     return await User.findByIdAndUpdate(userId, {pfp_path : fileName})
-    .catch(error=>{
-        console.log(error);
-    })
 }
 
 const uploadPostPhotos = async (files, id)=>{
@@ -14,9 +11,6 @@ const uploadPostPhotos = async (files, id)=>{
         photos.push(files[i].filename)
     }
     return await Post.findByIdAndUpdate(id, {photos: photos})
-    .catch(error =>{
-        console.log(error);
-    })
 }
 
 module.exports = {

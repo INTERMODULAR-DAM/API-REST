@@ -3,38 +3,24 @@ const Comment = require('../models/comment')
 
 const getCommentById = async (id) =>{
     return await Comment.findById(id)
-    .catch(error=>{
-        console.log(error)
-    })
+
 }
 
 const getAllComments = async () =>{
     return await Comment.find({})
-    .catch(error=>{
-        console.log(error);
-    })
 }
 
 
 const getAllPostsComments = async (idPost) =>{
     return await Comment.find({post : idPost})
-    .catch(error=>{
-        console.log(error)
-    })
 }
 
 const createComment = async (data) =>{
     return await new Comment({...data}).save()
-    .catch(error=>{
-        console.log(error)
-    })
 }
 
 const deleteComment = async (id) =>{
     return await Comment.findByIdAndDelete(id)
-    .catch(error=>{
-        console.log(error)
-    })
 }
 
 const deleteAll = async (req,res) =>{
@@ -44,31 +30,15 @@ const deleteAll = async (req,res) =>{
             await Comment.deleteOne(allComments[i])
         return true;
     })
-    .catch(error=>{
-        console.log(error)
-        return false
-    })
 }
 
 const deleteCommentsByUser = async(id) =>{
-    await Comment.deleteMany({user : id})
-    .then(comments=>{
-        console.log(comments)
-    })
-    .catch(error =>{
-        console.log(error);
-    })
+   return await Comment.deleteMany({user : id})
 }
 
 
 const deleteCommentsByPost = async(id) =>{
-    await Comment.deleteMany({post : id})
-    .then(comments=>{
-        console.log(comments)
-    })
-    .catch(error =>{
-        console.log(error);
-    })
+    return await Comment.deleteMany({post : id})
 }
 
 module.exports = {

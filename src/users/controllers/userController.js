@@ -17,8 +17,7 @@ const getUserById = async (req,res)=>{
   }
   }
   catch(error){
-    console.log(error)
-    res.status(500).send({status : 500})
+    res.status(500).send({status : 500, data : "An internal error has ocurred"})
   }
 }
 
@@ -32,8 +31,7 @@ const getAllUser = async (req, res) =>{
       }
     }
   catch(error){
-    console.log(error)
-    res.status(400).send({status : 400, data : "An expected error has ocurred."})
+    res.status(500).send({status : 500, data : "An expected error has ocurred."})
   }
 }
 
@@ -47,7 +45,6 @@ const getFollowers = async (req,res) =>{
       return res.status(400).send({status : 400, data : "Something went wrong, please try again."})
     })
     .catch(error=>{
-      console.log(error);
       return res.status(500).send({status : 500, data : "An internal error has ocurred, please contact with your administrator"})
     })
 }
@@ -58,8 +55,7 @@ const signIn = async (req,res) =>{
       res.status(response.status).send({status : response.status, data : response.data});
     })
     .catch((error)=>{
-      console.log(error)
-      res.status(401).send({status : 401, error : "User not found"});
+      res.status(500).send({status : 500, data : "User not found"});
     })
     
 }
@@ -75,8 +71,7 @@ const signUp = async (req, res)=>{
         res.status(401).send(createdUser)
       } 
     }catch(error){
-    console.log(error);
-    res.status(400).send({status : 400, data : "The user could not be created, some fields have not been filled in correctly."})
+    res.status(500).send({status : 500, data : "The user could not be created, some fields have not been filled in correctly."})
     }
 }
 const updateUser = async (req, res) =>{
@@ -95,8 +90,7 @@ const updateUser = async (req, res) =>{
       res.status(401).send({status : 401, message : "You don't have authorization to update this user."})
     }
   }catch(error){
-      console.log(error)
-      res.status(401).send({status :401, error : error})
+      res.status(500).send({status :500, data : "An internal error has ocurred"})
     }
 }
 
@@ -118,8 +112,7 @@ const deleteUser = async (req,res) =>{
       res.status(401).send({status : 401, data : "You don't have authorization to remove this user."})
     }
     }catch(error){
-      console.log(error)
-      res.status(400).send({status : 401, error : error})
+      res.status(500).send({status : 500, data : "An internal error has ocurred"})
     }
 }
 
@@ -134,7 +127,6 @@ const forgotPassword = async (req, res) =>{
           res.status(400).send({status : 400, data : "No account has this email linked, please enter a correct email adress."});
     })
     .catch(error=>{
-      console.log(error);
       res.status(500).send({status : 500, data : "An internal error has ocurred"});
     })
 
@@ -150,7 +142,6 @@ const followAUser = async (req,res) =>{
     }
   })
   .catch(error=>{
-    console.log(error)
     return res.status(500).send({status : 500, data : "An internal error has ocurred"})
   })
 }
@@ -165,7 +156,6 @@ const unfollowAUser = async (req,res) =>{
     }
   })
   .catch(error=>{
-    console.log(error)
     return res.status(500).send({status : 500, data : "An internal error has ocurred"})
   })
 }

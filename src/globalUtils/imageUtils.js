@@ -56,7 +56,7 @@ const multerPostUpload = multer({
                 resolve(files.length);
             });
         }) 
-        if(numPhotos >= 7){
+        if(numPhotos + files.size > 7){
             cb(new Error("Can't upload"))
 
         }else{

@@ -16,7 +16,6 @@ const uploadPostPhotos = async(req,res) =>{
             return res.status(200).send({status : 200, data : "The photo has uploaded successfully"});
         })
         .catch(error=>{
-            console.log(error);
             return res.status(500).send({status : 500, data : "An internal error has ocurred."});
         })
 }

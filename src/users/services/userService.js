@@ -15,19 +15,11 @@ const getUserById = async (_id)=>{
 }
 
 const getAllUser = async () =>{
-    let allUsers =  await User.find((error, users) => {
-        if(error){
-          console.log("ERROR:", error);
-        }
-      }).clone()
-      return allUsers;
+    return await User.find()
 }
 
 const getFollowers = async (id)=>{
     return await User.find({following : [id]})
-    .catch(error=>{
-        console.log(error);
-    })
 }
 
 const signIn = async (userId,password) =>{
@@ -64,7 +56,6 @@ const signIn = async (userId,password) =>{
         }
     })
     .catch(error =>{
-        console.log(error)
         return {status : 500, data : "An internal error has ocurred, please contact with your administrator"}
 
     })     
@@ -73,18 +64,13 @@ const signIn = async (userId,password) =>{
 const signUp = async (user) =>{
     user.password = await service.encrypt(user.password);
     let token= await new Promise(async (resolve,reject) =>{
-         try {
-             new User(user).save((err, newUser) => {
-                if (err) {
-                    reject({status : 400, data : "Some fields were bad, please fix it."})
-                    console.log(err)
-                } 
-                resolve(service.createToken(newUser)); 
-            }); 
-        } catch (error) {
-            console.log(error);
-            reject({status : 400, data : "Some fields were bad, please fix it."});
-        }
+        new User(user).save((err, newUser) => {
+        if (err) {
+            reject({status : 400, data : "Some fields were bad, please fix it."})
+        } 
+        resolve(service.createToken(newUser)); 
+        }); 
+        reject({status : 500, data : "Some fields were bad, please fix it."});   
     }) 
     return token;
 }
@@ -100,13 +86,10 @@ const deleteUser = async (id) =>{
         response = false;
         if(result != null){
             response = true;
-            console.log(result.pfp_path)
             deleteImage(result.pfp_path);
             postService.deleteAllPostsByUser(id);
             commentService.deleteCommentsByUser(id);
         }
-    }).catch(error => {
-      console.log(error);
     })
     return response;
 }

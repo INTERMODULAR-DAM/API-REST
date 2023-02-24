@@ -9,31 +9,19 @@ const getAllPosts = async ()=>{
 
 const getAllUserOwnPost = async(id)=>{
     return await Post.find({user : id})
-    .catch(error =>{
-        console.log(error)
-    })
 }
 
 
 const getAllUserPost = async(id)=>{
     return await Post.find({user : id})
-    .catch(error =>{
-        console.log(error)
-    })
 }
 
 const getAllPublicPosts = async()=>{
     return await Post.find({privacity : false})
-    .catch(error => {
-        console.log(error)
-    })
 }
 
 const getPostById = async(id) =>{
     return await Post.findById(id)
-    .catch(error =>{
-        console.log(error)
-    })
 }
 
 const createPost = async (body) =>{
@@ -41,7 +29,6 @@ const createPost = async (body) =>{
         try {
             new Post({...body}).save(async (error,post)=>{
                 if(error){
-                    console.log(error)
                     reject({status : 404, data : "The post could not be created"})
                 }
                 await Post.updateOne({_id : post._id},{photos : post.photos});
@@ -63,10 +50,6 @@ const deleteAllPostsByUser = async (id) =>{
         })
         return true;
     })
-    .catch(error =>{
-        console.log(error);
-        return false;
-    })
 }
 
 const deletePostById = async (id)=>{
@@ -79,18 +62,12 @@ const deletePostById = async (id)=>{
             response = true;
         }
     })
-    .catch(error =>{
-        console.log(error)
-    })
     return response
 }
 
 
 const updatePost = async (id, newData) =>{
     return await Post.updateOne({_id : id}, newData)
-    .catch(error =>{
-        console.log(error)
-    })
 }
 
 module.exports = {
