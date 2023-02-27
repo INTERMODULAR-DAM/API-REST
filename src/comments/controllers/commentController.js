@@ -17,7 +17,7 @@ const getAllComments = async (req,res) =>{
 
 
 const getAllPostsComments = async (req,res) =>{
-    const {_id} = req.query;
+    const {_id} = req.headers;
     await commentService.getAllPostsComments(_id)
     .then(comments =>{
         if(comments.length != 0){
@@ -49,7 +49,7 @@ const createComment = async (req,res) =>{
 
 const deleteComment = async (req,res) =>{
     let {user} = req;
-    const {_id} = req.query;
+    const {_id} = req.headers;
     const comment = await commentService.getCommentById(_id);
     try{
         if(user.sub == comment.user || user.rol == true){

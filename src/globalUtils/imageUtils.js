@@ -47,7 +47,6 @@ const multerPostUpload = multer({
     filename :  async (req,files,cb)=> {
         const {_id} = req.headers;
         let path = __dirname + '/../public/images/posts/' + _id;
-        
         let numPhotos = await new Promise((resolve,reject)=>{
             fs.readdir(path, (error, files)=>{
                 if(error){
@@ -58,7 +57,6 @@ const multerPostUpload = multer({
         }) 
         if(numPhotos + files.size > 7){
             cb(new Error("Can't upload"))
-
         }else{
             const fileExtension = extname(files.originalname)
             let name = `${_id}_${numPhotos}${fileExtension}`;

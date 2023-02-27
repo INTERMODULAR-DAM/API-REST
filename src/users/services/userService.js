@@ -68,9 +68,8 @@ const signUp = async (user) =>{
         if (err) {
             reject({status : 400, data : "Some fields were bad, please fix it."})
         } 
-        resolve(service.createToken(newUser)); 
+        return resolve(service.createToken(newUser)); 
         }); 
-        reject({status : 500, data : "Some fields were bad, please fix it."});   
     }) 
     return token;
 }

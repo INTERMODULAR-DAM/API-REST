@@ -3,6 +3,7 @@ const userUtils = require('../utils/userUtils');
 
 const getUserById = async (req,res)=>{
   let _id;
+  
   if(req.headers._id != undefined){
     _id = req.headers._id
   }else{
@@ -90,7 +91,7 @@ const updateUser = async (req, res) =>{
       res.status(401).send({status : 401, message : "You don't have authorization to update this user."})
     }
   }catch(error){
-      res.status(500).send({status :500, data : "An internal error has ocurred"})
+      res.status(500).send({status :500, data : "Some fields are in use, please change"})
     }
 }
 
